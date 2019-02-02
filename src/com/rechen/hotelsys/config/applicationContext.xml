@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd" [
+<!ENTITY contextInclude SYSTEM "org/springframework/web/portlet/context/WEB-INF/contextInclude.xml">
+]>
+
+<beans> 
+
+     <!-- Spring提供了一个数据源，类似连接池的功能 -->
+     <bean id="dataSource"  class="org.springframework.jdbc.datasource.DriverManagerDataSource">    
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+        <property name="url" value="jdbc:mysql://localhost:3306/testdb?useUnicode=true&amp;characterEncoding=UTF-8"/>  
+        <property name="username" value="tester" />  
+        <property name="password" value="123456" />  
+     </bean>   
+     
+    <!-- hibernate session factory -->
+    <bean id="sessionFactory"
+		  class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">true</prop>				
+			</props>
+		</property>
+		
+		<property name="mappingResources">
+		   <list>
+				<value>/com/rechen/hotelsys/domain/Admin.hbm.xml</value>
+				<value>/com/rechen/hotelsys/domain/Hotel.hbm.xml</value>
+				<value>/com/rechen/hotelsys/domain/Room.hbm.xml</value>
+				<value>/com/rechen/hotelsys/domain/Customer.hbm.xml</value>
+				<value>/com/rechen/hotelsys/domain/FoodCategory.hbm.xml</value>
+				<value>/com/rechen/hotelsys/domain/Food.hbm.xml</value>
+				<value>/com/rechen/hotelsys/domain/Reservation.hbm.xml</value>
+		   </list>
+		</property>
+		
+    </bean>
+    
+    <!-- 
+      bean的编织  （bean weaving)
+      prototype scope 就是通知spring容器每次取这个对象的时候，都创建一个新对象。
+     -->
+     
+      <!-- Login相关 -->
+     <bean id="loginAction" class="com.rechen.hotelsys.action.LoginAction" scope="prototype">
+     	<property name="adminService" ref="adminService"></property>
+     </bean>
+	 <bean id="adminService" class="com.rechen.hotelsys.service.AdminServiceImpl">
+	 	<property name="adminDao" ref="adminDao"></property>
+	 </bean>
+	 <bean id="adminDao" class="com.rechen.hotelsys.dao.AdminDaoImpl">
+	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 </bean>
+	 
+	 <!-- Hotel相关 -->
+	 <bean id="hotelAction" class="com.rechen.hotelsys.action.HotelAction" scope="prototype">
+	 	<property name="hotelService" ref="hotelService"></property>
+	 </bean>
+	 <bean id="hotelService" class="com.rechen.hotelsys.service.HotelServiceImpl">
+	 	<property name="hotelDao" ref="hotelDao"></property>
+	 </bean>
+	 <bean id="hotelDao" class="com.rechen.hotelsys.dao.HotelDaoImpl">
+	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 </bean>
+	 
+     <!-- Room相关 -->
+     <bean id="roomAction" class="com.rechen.hotelsys.action.RoomAction" scope="prototype">
+	 	<property name="roomService" ref="roomService"></property>
+	 	<property name="hotelService" ref="hotelService"></property>
+	 </bean>
+	 <bean id="roomService" class="com.rechen.hotelsys.service.RoomServiceImpl">
+	 	<property name="roomDao" ref="roomDao"></property>
+	 	<property name="hotelDao" ref="hotelDao"></property>
+	 </bean>
+	 <bean id="roomDao" class="com.rechen.hotelsys.dao.RoomDaoImpl">
+	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 </bean>
+	 
+	 <!-- Customer相关 -->
+	 <bean id="customerAction" class="com.rechen.hotelsys.action.CustomerAction">
+	 	<property name="customerService" ref="customerService"></property>
+	 </bean>
+	 <bean id="customerService" class="com.rechen.hotelsys.service.CustomerServiceImpl">
+	 	<property name="customerDao" ref="customerDao"></property>
+	 </bean>
+	 <bean id="customerDao" class="com.rechen.hotelsys.dao.CustomerDaoImpl">
+	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 </bean>
+	 
+	 <!-- FoodCategory相关 -->
+	 <bean id="foodAction" class="com.rechen.hotelsys.action.FoodAction">
+	 	<property name="foodCategoryService" ref="foodCategoryService"></property>
+	 	<property name="foodService" ref="foodService"></property>
+	 </bean>
+	 <bean id="foodCategoryService" class="com.rechen.hotelsys.service.FoodCategoryServiceImpl">
+	 	<property name="foodCategoryDao" ref="foodCategoryDao"></property>
+	 </bean>
+	 <bean id="foodCategoryDao" class="com.rechen.hotelsys.dao.FoodCategoryDaoImpl">
+	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 </bean>
+	 
+	  <!-- Food相关 -->
+	 <bean id="foodService" class="com.rechen.hotelsys.service.FoodServiceImpl">
+	 	<property name="foodDao" ref="foodDao"></property>
+	 </bean>
+	 <bean id="foodDao" class="com.rechen.hotelsys.dao.FoodDaoImpl">
+	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 </bean>
+	 
+	 <!-- Reservation相关 -->
+	 <bean id="reservationAction" class="com.rechen.hotelsys.action.ReservationAction">
+	 	<property name="roomService" ref="roomService"></property>
+	 	<property name="hotelService" ref="hotelService"></property>
+	 	<property name="customerService" ref="customerService"></property>
+	 	<property name="reservationService" ref="reservationService"></property>
+	 </bean>
+	 <bean id="reservationService" class="com.rechen.hotelsys.service.ReservationServiceImpl">
+	 	<property name="reservationDao" ref="reservationDao"></property>
+	 	<property name="roomDao" ref="roomDao"></property>
+	 	<property name="customerDao" ref="customerDao"></property>
+	 </bean>
+	 <bean id="reservationDao" class="com.rechen.hotelsys.dao.ReservationDaoImpl">
+	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 </bean>
+</beans>

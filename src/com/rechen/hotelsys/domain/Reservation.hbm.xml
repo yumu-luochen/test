@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.rechen.hotelsys.domain">
+
+   <class name="Reservation" table="tbl_reservation">
+   
+      <id name="reservationId" column="reservation_id" type="int">
+         <generator class="increment"></generator>
+      </id>
+		
+	  <many-to-one name="room" class="Room" column="room_id" lazy="false" fetch="join"></many-to-one>
+      <many-to-one name="customer" class="Customer" column="customer_id" lazy="false" fetch="join"></many-to-one>
+   </class>
+
+</hibernate-mapping>

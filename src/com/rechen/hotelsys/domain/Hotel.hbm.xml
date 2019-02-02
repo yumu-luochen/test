@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.rechen.hotelsys.domain">
+
+   <class name="Hotel" table="tbl_hotel" lazy="false">
+   
+      <id name="hotelId" column="hotel_id" type="int">
+         <generator class="increment"></generator>
+      </id>
+      <property name="hotelName" column="hotel_name" not-null="true" type="string" length="50"></property>
+      <property name="hotelAddr" column="hotel_addr" not-null="true" type="string" length="100"></property>
+      <property name="hotelPhone" column="hotel_Phone" not-null="true" type="string" length="20"></property>
+      <property name="hotelRoomCount" column="hotel_room_count" not-null="true" type="int"></property>
+      <property name="hotelPic" column="hotel_pic" type="binary"></property>
+
+    
+   </class>
+
+</hibernate-mapping>

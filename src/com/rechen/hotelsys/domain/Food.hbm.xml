@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.rechen.hotelsys.domain">
+
+   <class name="Food" table="tbl_food">
+   
+      <id name="foodId" column="food_id" type="int">
+         <generator class="increment"></generator>
+      </id>
+      <property name="foodName" column="food_name" not-null="true" type="string" length="50"></property>
+      <property name="foodPurchasedPrice" column="food_purchased_price" not-null="true" type="double"></property>
+      <property name="foodSellPrice" column="food_sell_price" not-null="true" type="double" ></property>
+      <property name="foodNumber" column="food_number" not-null="true" type="int"></property>
+		
+	  <many-to-one name="foodCategory" class="FoodCategory" column="food_category_id" lazy="false" fetch="join"></many-to-one>
+     
+   </class>
+
+</hibernate-mapping>

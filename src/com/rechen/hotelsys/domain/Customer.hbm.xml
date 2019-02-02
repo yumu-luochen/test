@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping package="com.rechen.hotelsys.domain">
+
+   <class name="Customer" table="tbl_customer" lazy="false">
+   
+      <id name="customerId" column="customer_id" type="int">
+         <generator class="increment"></generator>
+      </id>
+      <property name="customerName" column="customer_name" not-null="true" type="string" length="20"></property>
+      <property name="customerSex" column="customer_sex" not-null="true" type="string" length="1" ></property>
+      <property name="customerIdentity" column="customer_identity" not-null="true" type="string" length="18" ></property>
+      <property name="customerPhone" column="customer_phone" not-null="true" type="string" length="20"></property>
+      <property name="customerEmail" column="customer_email" not-null="true" type="string" length="50"></property>
+      <property name="customerBook" column="customer_book" not-null="true" type="string" length="1"></property>
+		     
+   </class>
+
+</hibernate-mapping>
