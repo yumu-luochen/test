@@ -76,13 +76,14 @@
 						<a class="dropdown-item" href="<s:url namespace="/food" action="toInputFoodCategory"/>">食品分类添加</a>
 						<a class="dropdown-item" href="<s:url namespace="/food" action="loadFoodCategory"/>">食品分类列表</a>
 					</div></li>
-				<li class="nav-item dropdown"><a
+			<!--  	<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
 					role="button" data-toggle="dropdown" aria-haspopup="true"
 					aria-expanded="false"> 财务管理 </a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="#">数据视图</a>
 					</div></li>	
+			-->
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
 					role="button" data-toggle="dropdown" aria-haspopup="true"

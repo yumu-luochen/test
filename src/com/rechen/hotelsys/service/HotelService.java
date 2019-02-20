@@ -18,4 +18,6 @@ public interface HotelService {
 	Hotel getHotelById(Integer hotelId);
 	void updateHotel(Hotel hotel);
 	byte[] getHotelPicById(Integer hotelId);
+	
+	Hotel checkHotel(Hotel hotel);
 }

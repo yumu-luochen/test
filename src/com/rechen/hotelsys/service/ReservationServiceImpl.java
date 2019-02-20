@@ -14,6 +14,7 @@ import com.rechen.hotelsys.domain.Customer;
 import com.rechen.hotelsys.domain.Reservation;
 import com.rechen.hotelsys.domain.ReservationQueryHelper;
 import com.rechen.hotelsys.domain.Room;
+import com.rechen.hotelsys.exception.DataAccessException;
 import com.rechen.hotelsys.utils.Page;
 
 /**
@@ -31,7 +32,16 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public void saveReservation(Reservation reservation) {
 		
-		reservationDao.saveReservation(reservation);
+		reservation.setRoom(roomDao.getRoomById(reservation.getRoom().getRoomId()));
+		reservation.setCustomer(customerDao.getCustomerById(reservation.getCustomer().getCustomerId()));
+		
+		if(reservation.getCustomer().getCustomerId()==null)
+			throw new DataAccessException("必须输入客户的Id");
+		if(reservation.getCustomer().getCustomerBook().equals("t"))
+			throw new DataAccessException("该客户已经有预订信息!");
+		if(reservation.getRoom().getRoomStatus().equals("b"))
+			throw new DataAccessException("该客房已经被预订!");
+
 		
 		logger.info("进行对客房状态的修改,客房id为"+reservation.getRoom().getRoomId());
 		Room room = roomDao.getRoomById(reservation.getRoom().getRoomId());
@@ -44,6 +54,8 @@ public class ReservationServiceImpl implements ReservationService {
 		customer.setCustomerBook("t");
 		logger.info("客户状态修改完毕,状态为已预订!");
 		customerDao.updateCustomer(customer);
+		
+		reservationDao.saveReservation(reservation);
 	}
 
 	@Override
@@ -86,10 +98,20 @@ public class ReservationServiceImpl implements ReservationService {
 		Customer oldCustomer = reservationDao.getReservationById(reservation.getReservationId()).getCustomer();
 		Customer newCustomer = customerDao.getCustomerById(reservation.getCustomer().getCustomerId());
 		
+		if(reservation.getCustomer().getCustomerId()==null)
+			throw new DataAccessException("必须输入客户的Id");
 		
+
 		
-		if(oldCustomer.getCustomerId()!=newCustomer.getCustomerId()){
+		reservation.setRoom(roomDao.getRoomById(reservation.getRoom().getRoomId()));
+		reservation.setCustomer(customerDao.getCustomerById(reservation.getCustomer().getCustomerId()));
+		
+
+		
+		if(!oldCustomer.getCustomerId().equals(newCustomer.getCustomerId())){
 			logger.info("检测到更换客户!");
+			if(newCustomer.getCustomerBook().equals("t"))
+				throw new DataAccessException("该客户已经有预订信息!");
 			
 			logger.info("进行对旧客户状态的修改,客户id为"+oldCustomer.getCustomerId());
 			oldCustomer.setCustomerBook("f");
@@ -103,8 +125,11 @@ public class ReservationServiceImpl implements ReservationService {
 			
 		}
 		
-		if(oldRoom.getRoomId()!=newRoom.getRoomId()){
+		if(!oldRoom.getRoomId().equals(newRoom.getRoomId())){
 			logger.info("检测到客户更换预定房间!");
+			
+			if(newRoom.getRoomStatus().equals("b"))
+				throw new DataAccessException("该客房已经被预订!");
 			
 			logger.info("进行对旧客房状态的修改,客房id为"+oldRoom.getRoomId());
 			oldRoom.setRoomStatus("a");
@@ -131,7 +156,7 @@ public class ReservationServiceImpl implements ReservationService {
 		
 		return initPage;
 	}
-
+	
 	//----------------
 	
 	public void setRoomDao(RoomDao roomDao) {

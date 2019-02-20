@@ -49,12 +49,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <div class="container" >
 		<nav aria-label="breadcrumb" style=" margin-left:-15px; margin-right:-15px;">
 		  <ol class="breadcrumb">
-		    <li class="breadcrumb-item"><a href="#">首页</a></li>
-		    <li class="breadcrumb-item"><a href="#">分店管理</a></li>
+		    <li class="breadcrumb-item"><a href='<s:url namespace="/login" action="home"/>'>首页</a></li>
+		    <li class="breadcrumb-item"><a href='<s:url namespace="/home" action="toHotel"/>'>分店管理</a></li>
 		    <li class="breadcrumb-item active" aria-current="page">分店列表</li>
 		  </ol>
 		</nav>    
-		</div>
 	 <div class="m-3">
 			 <table class="table">
 			  <thead>
@@ -82,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			        <button class="btn btn-primary btn-sm" onclick="updateHotel(<s:property value="hotelId"/>);"> 修 改 </button>
 			        <button class="btn btn-danger btn-sm" onclick="promptRemoveHotel(<s:property value="hotelId"/>,'<s:property value="hotelName"/>');"> 删 除 </button>
 			      </td>
-			    </tr>			       
+			    </tr>		       
 			    </s:iterator>
 			  </tbody>
 			</table>	       

@@ -32,11 +32,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  <h1 class="display-4">欢迎来到落尘酒店客房管理系统</h1>
 		  <p class="lead">你可以进行一些操作.</p>
 		  <hr class="my-4">
-		  <button type="button" class="btn btn-primary btn-lg btn-block">分店管理</button>
-		  <button type="button" class="btn btn-success btn-lg btn-block">客房管理</button>
-		  <button type="button" class="btn btn-info btn-lg btn-block">住宿管理</button>
-		  <button type="button" class="btn btn-warning btn-lg btn-block">财务管理</button>
-		  <button type="button" class="btn btn-dark btn-lg btn-block">系统维护</button>
+		  <a class="btn-block" href='<s:url namespace="/home" action="toHotel"/>'><button type="button" class="btn btn-primary btn-lg btn-block">分店管理</button></a>
+		  <a class="btn-block" href='<s:url namespace="/home" action="toRoom"/>'><button type="button" class="btn btn-success btn-lg btn-block">客房管理</button></a>
+		  <a class="btn-block" href='<s:url namespace="/home" action="toReservation"/>'><button type="button" class="btn btn-danger btn-lg btn-block">预订管理</button></a>
+		  <a class="btn-block" href='<s:url namespace="/home" action="toCustomer"/>'><button type="button" class="btn btn-info btn-lg btn-block">客户管理</button></a>
+		  <a class="btn-block" href='<s:url namespace="/home" action="toFood"/>'><button type="button" class="btn btn-warning btn-lg btn-block">食品管理</button></a>
+		  <a class="btn-block" href='<s:url namespace="/home" action="toAdmin"/>'><button type="button" class="btn btn-dark btn-lg btn-block" >系统维护</button></a>
 		</div>       
        </div>
     </div>

@@ -56,4 +56,9 @@ public class HotelServiceImpl implements HotelService{
 		return hotelDao.getHotelPicById(hotelId);
 	}
 
+	@Override
+	public Hotel checkHotel(Hotel hotel) {
+		return hotelDao.checkHotel(hotel);
+	}
+
 }

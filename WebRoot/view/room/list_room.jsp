@@ -55,8 +55,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <div class="container" >
 		<nav aria-label="breadcrumb" style=" margin-left:-15px; margin-right:-15px;">
 		  <ol class="breadcrumb">
-		    <li class="breadcrumb-item"><a href="#">首页</a></li>
-		    <li class="breadcrumb-item"><a href="#">客房管理</a></li>
+		    <li class="breadcrumb-item"><a href='<s:url namespace="/login" action="home"/>'>首页</a></li>
+		    <li class="breadcrumb-item"><a href='<s:url namespace="/home" action="toRoom"/>'>客房管理</a></li>
 		    <li class="breadcrumb-item active" aria-current="page">客房列表</li>
 		  </ol>
 		</nav>    

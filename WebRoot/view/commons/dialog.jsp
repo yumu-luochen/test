@@ -15,7 +15,7 @@
 				<p id="msgInfo"></p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+				<input type="button" name="Submit"  class="btn btn-primary" onclick="javascript:history.back(-1);" value="关闭">
 			</div>
 		</div>
 	</div>

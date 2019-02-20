@@ -22,8 +22,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		<div class="container" >
 		<nav aria-label="breadcrumb" style=" margin-left:-15px; margin-right:-15px;">
 		  <ol class="breadcrumb">
-		    <li class="breadcrumb-item"><a href="#">首页</a></li>
-		    <li class="breadcrumb-item"><a href="#">客房管理</a></li>
+		    <li class="breadcrumb-item"><a href='<s:url namespace="/login" action="home"/>'>首页</a></li>
+		    <li class="breadcrumb-item"><a href='<s:url namespace="/home" action="toRoom"/>'>客房管理</a></li>
 		    <li class="breadcrumb-item active" aria-current="page">客房信息修改</li>
 		  </ol>
 		</nav>    
@@ -40,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  <hr>
               <div class="form-group">
 				<label for="hotelPhoto">所属分店</label><br>
-				<s:select name="room.hotel.hotelId" list="hotelList" cssClass="form-control" listKey="hotelId" listValue="hotelName" headerKey="" headerValue="-请选择-"></s:select>
+				<s:select name="room.hotel.hotelId" list="hotelList" cssClass="form-control" listKey="hotelId" listValue="hotelName"></s:select>
 			  </div>
 			  <hr>
               <div class="form-group">
@@ -62,7 +62,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    <label>备注说明</label>
 			    <s:textarea name="room.roomMemo" cssClass="form-control" rows="3" cols="50"  placeholder="说明房间额外信息"></s:textarea>
 			  </div>
-			  <hr>				  	  			  			  		
+			  <hr>				  	
 			  <div class="form-group">
 			    <s:submit value="修改房间信息" cssClass="btn btn-primary"></s:submit>
 			  </div>	             
@@ -71,5 +71,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        </div>
      </div>
     <jsp:include page="/view/commons/footer.jsp"></jsp:include>
+    <jsp:include page="/view/commons/dialog.jsp"></jsp:include>
   </body>
 </html>

@@ -40,9 +40,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    <s:password cssClass="form-control" name="admin.adminPwd" placeholder="请输入密码信息" maxlength="6"></s:password>
 		  </div>
 		  <c:if test="${not empty errMsg}">
-          <div class="alert alert-danger text-center">
-			 ${errMsg}
-		  </div>		
+	          <div class="alert alert-danger text-center">
+				 ${errMsg}
+			  </div>		
 		  </c:if>  	  
 		  <div>
 		  	<s:submit cssClass="btn btn-primary" value="系 统 登 录"></s:submit>

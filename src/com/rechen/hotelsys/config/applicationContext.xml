@@ -74,6 +74,7 @@
      <bean id="roomAction" class="com.rechen.hotelsys.action.RoomAction" scope="prototype">
 	 	<property name="roomService" ref="roomService"></property>
 	 	<property name="hotelService" ref="hotelService"></property>
+	 	<property name="reservationService" ref="reservationService"></property>
 	 </bean>
 	 <bean id="roomService" class="com.rechen.hotelsys.service.RoomServiceImpl">
 	 	<property name="roomDao" ref="roomDao"></property>

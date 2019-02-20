@@ -69,7 +69,7 @@ public class RoomServiceImpl implements RoomService {
 		Hotel newHotel = hotelDao.getHotelById(room.getHotel().getHotelId());
 		roomDao.updateRoom(room);
 		
-		if(oldHotel.getHotelId()!=newHotel.getHotelId()){
+		if(!oldHotel.getHotelId().equals(newHotel.getHotelId())){
 			logger.info("检测到客房更换分店!旧分店名称为:"+oldHotel.getHotelName()+",新分店名称为:"+newHotel.getHotelName());
 			oldHotel.setHotelPic(hotelDao.getHotelPicById(oldHotel.getHotelId()));
 			oldHotel.setHotelRoomCount(oldHotel.getHotelRoomCount()-1);

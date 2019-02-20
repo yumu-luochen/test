@@ -11,10 +11,10 @@ public class VersionInfo {
 	
     //application info
 	public final static String APP_NAME="酒店客房管理系统";
-    public final static String APP_VERSION="1.8";
+    public final static String APP_VERSION="1.9";
     public final static String APP_STATUS="Beta";
-    public final static String APP_BUILDATE="2019-02-02";
-    public final static String APP_BUILDVER="#8";
+    public final static String APP_BUILDATE="2019-02-04";
+    public final static String APP_BUILDVER="#9";
     	
     //application author
     public final static String APP_AUTHOR="落尘开发";

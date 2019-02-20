@@ -15,6 +15,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.rechen.hotelsys.domain.Room;
 import com.rechen.hotelsys.domain.RoomQueryHelper;
+import com.rechen.hotelsys.exception.DataAccessException;
 
 /**
  * @author Re.chen
@@ -27,6 +28,16 @@ public class RoomDaoImpl extends HibernateDaoSupport implements RoomDao {
 	@Override
 	public void saveRoom(Room room) {
 		logger.info("正在尝试添加房间信息:"+room.toString());
+		if(StringUtils.isEmpty(room.getRoomNo()))
+			throw new DataAccessException("必须输入房间编号!");
+		if(room.getHotel().getHotelId()==null)
+			throw new DataAccessException("必须选择相应分店!");
+		if(StringUtils.isEmpty(room.getRoomType()))
+			throw new DataAccessException("必须选择房间类型!");
+		if(StringUtils.isEmpty(room.getRoomEquipStr()))
+			throw new DataAccessException("必须添加屋内设施!");
+		if(StringUtils.isEmpty(room.getRoomStatus()))
+			throw new DataAccessException("必须设定房间状态!");
 		this.getHibernateTemplate().save(room);
 	}
 
@@ -58,6 +69,16 @@ public class RoomDaoImpl extends HibernateDaoSupport implements RoomDao {
 	@Override
 	public void updateRoom(Room room) {
 		logger.info("正在更新客房编号为:"+room.getRoomId());
+		if(StringUtils.isEmpty(room.getRoomNo()))
+			throw new DataAccessException("必须输入房间编号!");
+		if(room.getHotel().getHotelId()==null)
+			throw new DataAccessException("必须选择相应分店!");
+		if(StringUtils.isEmpty(room.getRoomType()))
+			throw new DataAccessException("必须选择房间类型!");
+		if(StringUtils.isEmpty(room.getRoomEquipStr()))
+			throw new DataAccessException("必须添加屋内设施!");
+		if(StringUtils.isEmpty(room.getRoomStatus()))
+			throw new DataAccessException("必须设定房间状态!");
 		this.getHibernateTemplate().update(room);
 	}
 

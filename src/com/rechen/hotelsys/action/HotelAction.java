@@ -5,9 +5,16 @@ package com.rechen.hotelsys.action;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+
+
+
+
+
 
 
 
@@ -32,6 +39,8 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import com.rechen.hotelsys.action.HotelAction;
 import com.rechen.hotelsys.domain.Hotel;
+import com.rechen.hotelsys.exception.DataAccessException;
+import com.rechen.hotelsys.exception.HotelSysException;
 import com.rechen.hotelsys.service.HotelService;
 
 /**
@@ -40,7 +49,7 @@ import com.rechen.hotelsys.service.HotelService;
  */
 @ParentPackage("hotelSysPkg")
 @Namespace("/hotel")
-public class HotelAction extends BaseAction {
+public class HotelAction extends BaseAction implements RequestAware,SessionAware{
 	
 	private static final Logger logger = Logger.getLogger(HotelAction.class);
 	
@@ -48,7 +57,8 @@ public class HotelAction extends BaseAction {
 
 	private List<Hotel> hotelList;
 	private HotelService hotelService;
-
+	private Map<String,Object> request;
+	private Map<String,Object> session;
 
 	private File hotelPic;
 	
@@ -58,11 +68,20 @@ public class HotelAction extends BaseAction {
 		return "input_page";
 	}
 	
-	@Action(value="saveHotel",results={@Result(name="list_action",location="loadHotels",type="redirectAction")})
-	public String saveHotel(){
+	@Action(value="saveHotel",results={@Result(name="list_action",location="loadHotels",type="redirectAction"),
+			                           @Result(name="input_page",location="/view/hotel/input_hotel.jsp")})
+	public String saveHotel() throws Exception{
 		logger.info("正在准备添加新的分店,分店的信息为:"+hotel.toString());
 		FileInputStream fis = null;
-		try{
+		if(hotelPic==null){	
+			String defaultPicPath = ServletActionContext.getServletContext().getRealPath("/")+"imgs/no-pic.jpg"; 
+			fis =new FileInputStream(defaultPicPath);
+			byte[] imgData= new byte[fis.available()];
+			fis.read(imgData);
+			this.hotel.setHotelPic(imgData);
+			fis.close();
+		}	
+		else try{
 			fis = new FileInputStream(hotelPic);
 			byte[] imgData = new byte[fis.available()];
 			fis.read(imgData);
@@ -76,7 +95,14 @@ public class HotelAction extends BaseAction {
 				e.printStackTrace();
 			}
 		}
-		hotelService.saveHotel(hotel);
+		
+		try{
+			hotelService.saveHotel(hotel);
+		}catch(DataAccessException e){
+			this.request.put("errMsg", e.getMessage());
+			logger.info(e.getMessage());
+			return "input_page";
+		}
 		logger.info("成功添加新的分店!");
 		return "list_action";
 	}
@@ -88,12 +114,21 @@ public class HotelAction extends BaseAction {
 		return "list_page";		
 	}
 	
-	@Action(value="deleteHotel",results={@Result(name="list_action",location="loadHotels",type="redirectAction")})
+	@Action(value="deleteHotel",results={@Result(name="list_action",location="loadHotels",type="redirectAction"),
+										 @Result(name="list_page",location="/view/hotel/list_hotel.jsp")})
 	public String deleteHotel(){
-		logger.info("准备删除id为:"+hotel.getHotelId()+"的分店!");
-		hotelService.deleteHotel(hotel.getHotelId());
-		logger.info("已经成功删除!");
-		return "list_action";
+		try{
+			logger.info("准备删除id为:"+hotel.getHotelId()+"的分店!");
+			hotelService.checkHotel(hotelService.getHotelById(hotel.getHotelId()));
+			hotelService.deleteHotel(hotel.getHotelId());
+			logger.info("已经成功删除!");
+			return "list_action";
+		}catch(HotelSysException e){
+			this.request.put("errMsg", e.getMessage());
+			logger.info("分店还拥有分店,不能删除!");
+			return "list_page";
+		}
+		
 	}
 	
 	@Action(value="preUpdate",results={@Result(name="update_page",location="/view/hotel/update_hotel.jsp")})
@@ -103,29 +138,31 @@ public class HotelAction extends BaseAction {
 		return "update_page";
 	}
 	
-	@Action(value="updateHotel",results={@Result(name="list_action",location="loadHotels",type="redirectAction")})
+	@Action(value="updateHotel",results={@Result(name="list_action",location="loadHotels",type="redirectAction"),
+										 @Result(name="update_page",location="/view/hotel/update_hotel.jsp")})
 	public String updateHotel(){
 		FileInputStream fis = null;
-		try{
+		 try{
 			if(hotelPic!=null){
 				fis = new FileInputStream(hotelPic);
 				byte[] imgData = new byte[fis.available()];
 				fis.read(imgData);
 				this.hotel.setHotelPic(imgData);
+				fis.close();
 				}
 			else{
 				this.hotel.setHotelPic(hotelService.getHotelPicById(hotel.getHotelId()));
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-		}finally{
-			try {
-				fis.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
-		hotelService.updateHotel(hotel);
+		try{
+			hotelService.updateHotel(hotel);
+		}catch(DataAccessException e){
+			this.request.put("errMsg", e.getMessage());
+			logger.info(e.getMessage());
+			return "update_page";
+		}
 		logger.info("成功修改分店信息,准备进入分店列表界面!");
 		return "list_action";
 	}
@@ -173,5 +210,21 @@ public class HotelAction extends BaseAction {
 
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
+	}
+
+	public Map<String, Object> getRequest() {
+		return request;
+	}
+
+	public void setRequest(Map<String, Object> request) {
+		this.request = request;
+	}
+
+	public Map<String, Object> getSession() {
+		return session;
+	}
+
+	public void setSession(Map<String, Object> session) {
+		this.session = session;
 	}
 }

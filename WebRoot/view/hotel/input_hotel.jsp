@@ -19,11 +19,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
        function previewImage(file){
        
+    	   if (file.files && file.files[0]){
             var img = document.getElementById('picImg');
-						
-			if (file.files && file.files[0]) 			
-			{		
-			   
+            
 			   //准备一个文件读取器对象，并告诉它文件读取完毕之后要做什么。
 			   var reader = new FileReader();			  
 			   //成功读取了图片信息后，把读取结果赋予 	
@@ -32,17 +30,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               //开始读取指定的Blob中的内容。一旦完成，result属性中将包含一个data: URL格式的字符串以表示所读取文件的内容。			   		
 			   reader.onload = function(evt){
 			    img.src= evt.target.result;
-			    console.log("读取完毕,图片已经成功加载!"+evt.target.result);
-			   }
+			    console.log("读取完毕,图片已经成功加载!");
+			   };
 			
-			   console.log("开始读取!")
+			   console.log("开始读取!");
 			   reader.readAsDataURL(file.files[0]);
-			
-			}
-		    else{
-		       img.src='<c:url value="/imgs/no-pic.jpg"/>';
-		       alert("没有上传图片文件!");
-		    }
+			   }else{
+			       img.src="<c:url value="/imgs/no-pic.jpg"/>";
+			       console.log("没有上传图片!");
+			    }
 			
 	     } 
     
@@ -55,8 +51,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		<div class="container" >
 		<nav aria-label="breadcrumb" style=" margin-left:-15px; margin-right:-15px;">
 		  <ol class="breadcrumb">
-		    <li class="breadcrumb-item"><a href="#">首页</a></li>
-		    <li class="breadcrumb-item"><a href="#">分店管理</a></li>
+		    <li class="breadcrumb-item"><a href='<s:url namespace="/login" action="home"/>'>首页</a></li>
+		    <li class="breadcrumb-item"><a href='<s:url namespace="/home" action="toHotel"/>'>分店管理</a></li>
 		    <li class="breadcrumb-item active" aria-current="page">新开分店</li>
 		  </ol>
 		</nav>    
@@ -67,15 +63,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <!-- 表单提交为了安全起见，一般是post提交，如果有提交文件，那么一律似乎是多段提交 -->
 	            <!-- enctype: encode type 编码模式 -->
 	            <s:form namespace="/hotel" action="saveHotel" method="post" enctype="multipart/form-data">
+	            	<s:hidden name="hotel.hotelRoomCount" value="0"></s:hidden>
 	            	<div class="form-group">
 	            		<label>分店名称:</label>
-	            		<s:textfield name="hotel.hotelName" cssClass="form-control" placeholder="请输入分店名称信息"></s:textfield>
+	            		<s:textfield name="hotel.hotelName" cssClass="form-control" placeholder="请输入分店名称信息"></s:textfield>  
 	            		<hr>
 	            	</div>
 	            	<div class="form-group">
 	            		<label>分店照片:</label>
-	            		<img id="picImg" alt="加载不出来" src="<c:url value="/imgs/no-pic.jpg"/>" width="200" height="130" class="py-1"><br>
-	            		<s:file cssClass="form-control-file" name="hotelPic" onchange="previewImage(this)"></s:file>
+	            		<img  alt="加载不出来" src="<c:url value="/imgs/no-pic.jpg"/>" id="picImg" width="200" height="130" class="py-1"><br>
+	            		<s:file cssClass="form-control-file" name="hotelPic"  onchange="previewImage(this)"></s:file>
 	            	</div>
 	            	<hr>
 	            	<div class="form-group">
@@ -94,5 +91,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	       </div>
      </div>
     <jsp:include page="/view/commons/footer.jsp"></jsp:include>
+    <jsp:include page="/view/commons/dialog.jsp"></jsp:include>
   </body>
 </html>

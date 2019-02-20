@@ -12,7 +12,7 @@ public class Hotel extends ValueObject {
 	private String hotelName;
 	private String hotelAddr;
 	private String hotelPhone;
-	private Integer hotelRoomCount=0;
+	private Integer hotelRoomCount;
 	private byte[] hotelPic;
 	
 	
